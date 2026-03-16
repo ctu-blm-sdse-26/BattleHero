@@ -47,12 +47,50 @@ while (player.IsAlive && enemy.IsAlive)
     {enemy.Name} - HP: {enemy.Health}/{enemy.MaxHP}
     """);
 
-    Console.WriteLine("Press Enter to attack...");
-    Console.ReadLine();
+    Console.Write("""
+    ===============================
+    Choose Your Action
+    ===============================
+    1. Attack
+    2. Use Item From Inventory
+
+    choice:  
+    """);
+
+    choice = int.Parse(Console.ReadLine() ?? "1");
+
+    if (choice == 2)
+    {
+        Console.Write("""
+    ===============================
+    Choose an Item to Use
+    ===============================
+    1. Health Potion - Restores 50 HP
+    2. Armour - Increases defense
+    3. Weapon - Increases attack
+
+    choice:  
+    """);
+
+    choice = int.Parse(Console.ReadLine() ?? "1");
+    switch (choice)
+        {
+            case 1: new HealthPotion().Apply(player);
+            break;
+            case 2: new Armour(15).Apply(player);
+            break;
+            case 3: new Weapon("Power Pole", 35).Apply(player);
+            break;
+        }
+    }
+
+    Console.WriteLine("⚔️Player is now Attacking...");
+    Utils.Pause(1000);
+
 
     if (counter % 3 == 0)
     {
-        Console.WriteLine($"{player.Name} uses a DOMAIN EXPANSION!!!!");
+        Console.WriteLine($"{player.Name} uses a DOMAIN EXPANSION!!!! 🧙🏾‍♂️");
         player.SuperAttack(enemy);
     }
     else
@@ -61,6 +99,8 @@ while (player.IsAlive && enemy.IsAlive)
     }
     if (enemy.IsAlive && player.IsAlive)
     {
+        Console.WriteLine("👹Enemy is now Attacking...");
+        Utils.Pause(1000);
         enemy.Attack(player);
     }
     counter++;
@@ -73,7 +113,7 @@ Console.WriteLine($"""
 
 if (player.IsAlive)
 {
-Utils.PrintHeader("🎉 Victory! 🎉");
+    Utils.PrintHeader("🎉 Victory! 🎉");
     Console.WriteLine($"{player.Name} has defeated {enemy.Name}!");
 }
 else
