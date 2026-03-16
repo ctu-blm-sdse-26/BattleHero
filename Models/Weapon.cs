@@ -20,6 +20,7 @@ namespace HeroBattle.Models
       public override void Apply(Character target)
         {
             Console.WriteLine($"⚔️ {Name} is equipped!");
+            target.BaseAttack += Damage;
         }
 
         public override void Describe()
