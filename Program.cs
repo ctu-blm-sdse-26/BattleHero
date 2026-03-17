@@ -80,7 +80,7 @@ while (player.IsAlive && enemy.IsAlive)
             case 2: new Armour(15).Apply(player);
             break;
             case 3: new Weapon("Power Pole", 35).Apply(player);
-            //somethign
+            
             break;
         }
     }
