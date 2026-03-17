@@ -6,4 +6,8 @@ Battle Simulator Game Built in C#. The Project is intended to be worked through 
 - Vusi
 - Themba
 - Victoria
-_IM going through Changes
+- Franco
+- Prince
+- Zandre
+
+These Are our Contributors
