@@ -5,27 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using HeroBattle.Enums;
 using HeroBattle.Interfaces;
-
 namespace HeroBattle.Models
 {
     public class Inventory<T> where T : IDescribable
     {
         private readonly List<T> _items = new List<T>();
-
         public int Count => _items.Count;
-
         public void Add(T item)
         {
             _items.Add(item);
             Console.WriteLine($" [+] Added item to Inventory.");
         }
-
         public bool Remove(T item) => _items.Remove(item);
-
         public T? Find(Func<T, bool> predicate) => _items.FirstOrDefault(predicate);
-
         public IReadOnlyList<T> GetAll() => _items.AsReadOnly();
-
         public void ListAll()
         {
             if(_items.Count == 0)
@@ -50,18 +43,14 @@ namespace HeroBattle.Models
         public int BaseDefense { get; protected set; } = 10;
         public int Gold { get; private set; } = 0;
         public bool IsAlive => CurrentHP > 0;
-
         protected Weapon? EquippedWeapon;
-
         public Inventory<Item> Bag {get;} = new Inventory<Item>();
-
         private Dictionary<string, int> _stats = new Dictionary<string, int>
         {
-            { "Kills", 0 },
-            { "Damage", 0 },
-            { "Heals", 0 },
+        { "Kills", 0 },
+        { "Damage", 0 },
+        { "Heals", 0 },
         };
-
         public Character(string name, int level, HeroClass heroClass)
         {
             Name = name;
@@ -69,8 +58,6 @@ namespace HeroBattle.Models
             Class = heroClass;
             Health = MaxHP; 
         }
-
-        // --IDamageable--
         public void TakeDamage(int amount)
         {
             int reduced = Math.Max(0, amount - BaseDefense);
@@ -78,15 +65,12 @@ namespace HeroBattle.Models
             Utils.Utils.PrintWithColor($" {Name} takes {reduced} damage (block {amount - reduced}). HP: {Health}/{MaxHP}\n", 
             Health < MaxHP / 4 ? ConsoleColor.Red : ConsoleColor.DarkYellow);
         }
-
-         public void Heal(int amount)
+        public void Heal(int amount)
         {
             int before = Health;
             Health = Utils.Utils.Clamp(Health + amount, 0, MaxHP);
             _stats["Heals"] += Health - before;
         }
-
-        // --IAtacker--
         public virtual int Attack(IDamageable target)
         {
             int dmg = BaseAttack + (EquippedWeapon?.Damage ?? 0) + Rng.Next(-3, 4);
@@ -96,10 +80,7 @@ namespace HeroBattle.Models
             if (!target.IsAlive) _stats["Kills"]++;
             return dmg;
         }
-
-        // --Abstract Special--
         public abstract void UseSpecial(IDamageable target);
-
         public void Equip(Weapon w)
         {
         EquippedWeapon = w;
@@ -135,6 +116,4 @@ namespace HeroBattle.Models
         Console.WriteLine($" └─ Kills: {_stats["Kills"]} Dmg: {_stats["Damage"]} Healed: {_stats["Heals"]}");
         }
     }
-
-    
 }
