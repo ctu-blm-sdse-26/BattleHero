@@ -73,12 +73,14 @@ while (player.IsAlive && enemy.IsAlive)
     
     """);
 
-    bag.ListAll();
+    var items = bag.GetAll().ToList();
+    for (int i = 0; i < items.Count; i++)
+        Console.WriteLine($"{i + 1}. {items[i].Name}");
 
     Console.Write("Choice: ");
 
     choice = int.Parse(Console.ReadLine() ?? "1");
-    if(choice >= 1) 
+    if(choice >= 1 && choice <= items.Count) 
     {
         player.UseItem(choice - 1);
     } 
@@ -118,6 +120,8 @@ if (player.IsAlive)
 {
     Utils.PrintHeader("🎉 Victory! 🎉");
     Console.WriteLine($"{player.Name} has defeated {enemy.Name}!");
+    player.EarnGold(20);
+    player.LevelUp();
 }
 else
 {
