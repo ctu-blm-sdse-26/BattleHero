@@ -56,7 +56,6 @@ namespace HeroBattle.Models
             Health += amount;
             if (Health > MaxHP) Health = MaxHP;
         }
-
         
     }
 
