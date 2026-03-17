@@ -12,6 +12,7 @@ namespace HeroBattle.Models
     {
         public string Name { get; set; }
         public int Health { get; set; }
+        
         public int Level { get; set; } = 1;
         public HeroClass Class {get; set;}
         public int MaxHP => Level * 100;
@@ -47,6 +48,7 @@ namespace HeroBattle.Models
             Level = level;
             Class = heroClass;
             Health = MaxHP; 
+           
         }
 
          public void Heal(int amount)
