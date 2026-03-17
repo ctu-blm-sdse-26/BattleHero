@@ -115,6 +115,8 @@ if (player.IsAlive)
 {
     Utils.PrintHeader("🎉 Victory! 🎉");
     Console.WriteLine($"{player.Name} has defeated {enemy.Name}!");
+    player.EarnGold(20);
+    player.LevelUp();
 }
 else
 {
