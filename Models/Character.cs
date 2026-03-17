@@ -39,8 +39,9 @@ namespace HeroBattle.Models
         }
         public void Heal(int amount)
         {
-            Health += amount;
-            if (Health > MaxHP) Health = MaxHP;
+            int before = Health;
+            Health = Utils.Utils.Clamp(Health + amount, 0, MaxHP);
+            _stats["Heals"] += Health - before;
         }
         public void Equip(Weapon w)
         {
