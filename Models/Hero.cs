@@ -35,7 +35,17 @@ namespace HeroBattle.Models
             return damage;
         }
 
-
+        public void UseItem(int index)
+        {
+            var all = Bag.GetAll().ToList();
+            if(index < 0 || index >= all.Count)
+            {
+                Console.WriteLine(" ❌ Invalid item");
+                return;
+            }
+            all[index].Apply(this);
+            Bag.Remove(all[index]);
+        }
     }
 
 }
