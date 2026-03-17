@@ -12,6 +12,7 @@ namespace HeroBattle.Models
     {
         public string Name { get; set; }
         public int Health { get; set; }
+        
         public int Level { get; set; } = 1;
         public HeroClass Class {get; set;}
         public int MaxHP => Level * 100;
@@ -20,12 +21,34 @@ namespace HeroBattle.Models
         public int Gold { get; set; } = 0;
         public bool IsAlive => Health > 0;
 
+        private Dictionary<string, int> _stats = new Dictionary<string, int>
+        {
+            { "Kills", 0 },
+            { "Damage", 0 },
+            { "Heals", 0 },
+        };
+        public void UpdateStat(string stat, int amount)
+        {
+            if (_stats.ContainsKey(stat))
+            {
+                _stats[stat] += amount;
+            }
+        }
+        public void ShowStats()
+        {
+            Console.WriteLine($"\nStats for {Name}:");
+            foreach (var stat in _stats)
+            {
+                Console.WriteLine($"{stat.Key}: {stat.Value}");
+            }
+        }
         public Character(string name, int level, HeroClass heroClass)
         {
             Name = name;
             Level = level;
             Class = heroClass;
             Health = MaxHP; 
+           
         }
 
          public void Heal(int amount)
