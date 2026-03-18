@@ -46,6 +46,11 @@ namespace HeroBattle.Models
             all[index].Apply(this);
             Bag.Remove(all[index]);
         }
+
+        public override void UseSpecial(IDamageable target)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

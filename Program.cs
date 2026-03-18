@@ -1,4 +1,5 @@
-﻿using HeroBattle.Enums;
+﻿using BattleHero.Models;
+using HeroBattle.Enums;
 using HeroBattle.Interfaces;
 using HeroBattle.Models;
 using HeroBattle.Utils;
