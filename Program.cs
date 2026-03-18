@@ -98,7 +98,7 @@ while (player.IsAlive && enemy.IsAlive)
         Console.WriteLine($"{player.Name} uses a DOMAIN EXPANSION!!!! 🧙🏾‍♂️");
         player.SuperAttack(enemy);
     }
-    else
+    else if (choice == 1)
     {
         player.Attack(enemy);
     }

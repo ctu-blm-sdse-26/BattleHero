@@ -57,6 +57,7 @@ namespace HeroBattle.Models
             Level = level;
             Class = heroClass;
             Health = MaxHP; 
+           
         }
         public void TakeDamage(int amount)
         {
@@ -115,5 +116,6 @@ namespace HeroBattle.Models
         Console.WriteLine($" │ Weapon: {EquippedWeapon?.Name ?? "Bare hands"}");
         Console.WriteLine($" └─ Kills: {_stats["Kills"]} Dmg: {_stats["Damage"]} Healed: {_stats["Heals"]}");
         }
+        
     }
 }
