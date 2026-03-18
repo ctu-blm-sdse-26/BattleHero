@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Threading.Tasks;
+using BattleHero.Models;
 using HeroBattle.Enums;
 using HeroBattle.Interfaces;
 namespace HeroBattle.Models
