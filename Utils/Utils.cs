@@ -8,7 +8,7 @@ namespace HeroBattle.Utils
 {
     static public class Utils
     {
-        public static object Utils { get; internal set; }
+        // public static object Utils { get; internal set; }
 
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
         {
