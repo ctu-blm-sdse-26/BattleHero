@@ -33,5 +33,10 @@ namespace HeroBattle.Models
             Health -= effectiveDamage;
             if (Health < 0) Health = 0;
         }
+
+        public override void UseSpecial(IDamageable target)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

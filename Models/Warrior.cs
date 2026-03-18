@@ -4,7 +4,7 @@ using HeroBattle.Interfaces;
 using HeroBattle.Utils;
 
 namespace HeroBattle.Models; // Match the Program.cs namespace
- 
+
 public class Warrior : Character
 
 {
@@ -13,12 +13,12 @@ public class Warrior : Character
 
     public Warrior(string name)
 
-        : base(name, HeroClass.Warrior, maxHp: 120, baseAtk: 12, defense: 5) 
+        : base(name, HeroClass.Warrior, maxHp: 120, baseAtk: 12, defense: 5)
 
-    { 
+    {
 
     }
- 
+
     public void DealDamage(IDamageable target)
     {
 
@@ -42,5 +42,16 @@ public class Warrior : Character
 
     }
 
+    public override void UseSpecial(IDamageable target)
+    {
+        Console.WriteLine($" 🛡 {Name} uses SHIELD BASH!");
+        Utils.Utils.Pause();
+        base.Attack(target);
+        if (target.IsAlive)
+        {
+            Console.WriteLine($" 💫 Target stunned! Bonus strike!");
+            Utils.Utils.Pause();
+            base.Attack(target);
+        }
+    }
 }
- 

@@ -16,8 +16,8 @@ namespace HeroBattle.Models
         public HeroClass Class { get; set; }
         public int MaxHP { get; protected set; }
         public int CurrentHP { get; private set; }
-        public int BaseAttack { get; protected set; } = 15;
-        public int BaseDefense { get; protected set; } = 10;
+        public int BaseAttack { get; set; } = 15;
+        public int BaseDefense { get; set; } = 10;
         public int Gold { get; private set; } = 0;
         public bool IsAlive => CurrentHP > 0;
         protected Weapon? EquippedWeapon;
@@ -31,6 +31,7 @@ namespace HeroBattle.Models
         { "Damage", 0 },
         { "Heals", 0 },
         };
+        private HeroClass heroClass;
 
         protected Character(string name, HeroClass heroClass, int maxHp, int baseAtk,
 int defense)
@@ -44,6 +45,14 @@ int defense)
             Level = 1;
             Gold = 50;
         }
+
+        protected Character(string name, int level, HeroClass heroClass)
+        {
+            Name = name;
+            Level = level;
+            this.heroClass = heroClass;
+        }
+
         public void TakeDamage(int amount)
         {
             int reduced = Math.Max(0, amount - BaseDefense);
