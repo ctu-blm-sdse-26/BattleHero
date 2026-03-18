@@ -32,10 +32,24 @@ namespace BattleHero.Models
                 Console.WriteLine(
                     $" #{i + 1} {sorted[i].Hero.Name,-15} ({sorted[i].Hero.Class}) " +
                     $"Score: {sorted[i].Score}");
-            }
+            }}
+
+            //Clear leaderboard
+        public void Clear()
+        {
+            _entries.Clear();
+        }
+ 
+        // Get top N entries
+        public List<(T Hero, int Score)> GetTopN(int n)
+        {
+            return _entries
+                .OrderByDescending(e => e.Score)
+                .ThenByDescending(e => e.Hero.Level)
+                .Take(n)
+                .ToList();
         }
 
-
-    }
-}
+        
+}}
 
