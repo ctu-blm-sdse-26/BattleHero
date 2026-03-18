@@ -8,6 +8,7 @@ namespace HeroBattle.Models;
 public class Mage : Character
 {
     private int _mana;  // Track current mana separately
+    public int MaxMana { get; private set; }
 
     public Mage(string name)
         : base(name, HeroClass.Mage, maxHp: 80, baseAtk: 8, defense: 1)
@@ -18,6 +19,11 @@ public class Mage : Character
         // Can't set CurrentMana directly - it's private set
         // Instead, we'll use RestoreMana to set initial mana
         RestoreMana(MaxMana);
+    }
+
+    private void RestoreMana(int maxMana)
+    {
+        _mana = maxMana;
     }
 
     public override int Attack(IDamageable target)
@@ -40,9 +46,15 @@ public class Mage : Character
         Console.WriteLine($" 🔥 {Name} casts FIREBALL! (Mana: {_mana}/{MaxMana})");
         Utils.Utils.Pause();
         
-        int dmg = BaseAtk * 3 + Rng.Next(5, 20);
+        int dmg = BaseAttack * 3 + Rng.Next(5, 20);
         target.TakeDamage(dmg);
         Console.WriteLine($" Fireball deals {dmg} fire damage!");
+    }
+
+    private void UseMana(int v)
+    {
+        _mana -= v;
+        if (_mana < 0) _mana = 0;
     }
 
     public override void Describe()
