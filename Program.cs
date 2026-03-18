@@ -5,7 +5,12 @@ using HeroBattle.Utils;
 
 Utils.PrintHeader("⚔️ Hero Battle Simulator ⚔️");
 
+var bag = new Inventory<Item>();
+bag.Add(new HealthPotion());
+bag.Add(new Weapon("Short Sword", damage: 6));
+
 Console.Write("""
+
 Choose your hero class: 
 1. Warrior - High health and defense, moderate attack.
 2. Mage - High attack, low health and defense.
@@ -61,27 +66,27 @@ while (player.IsAlive && enemy.IsAlive)
 
     if (choice == 2)
     {
-        Console.Write("""
+        Console.Write($"""
     ===============================
     Choose an Item to Use
-    ===============================
-    1. Health Potion - Restores 50 HP
-    2. Armour - Increases defense
-    3. Weapon - Increases attack
-
-    choice:  
+    =============================== 
+    
     """);
 
+    var items = bag.GetAll().ToList();
+    for (int i = 0; i < items.Count; i++)
+        Console.WriteLine($"{i + 1}. {items[i].Name}");
+
+    Console.Write("Choice: ");
+
     choice = int.Parse(Console.ReadLine() ?? "1");
-    switch (choice)
-        {
-            case 1: new HealthPotion().Apply(player);
-            break;
-            case 2: new Armour(15).Apply(player);
-            break;
-            case 3: new Weapon("Power Pole", 35).Apply(player);
-            break;
-        }
+    if(choice >= 1 && choice <= items.Count) 
+    {
+        player.UseItem(choice - 1);
+    } 
+    else
+    {
+        Console.WriteLine("Invalid Choice.");  
     }
 
     Console.WriteLine("⚔️Player is now Attacking...");
@@ -115,12 +120,14 @@ if (player.IsAlive)
 {
     Utils.PrintHeader("🎉 Victory! 🎉");
     Console.WriteLine($"{player.Name} has defeated {enemy.Name}!");
+    player.EarnGold(20);
+    player.LevelUp();
 }
 else
 {
     Utils.PrintHeader("💀 Game Over! 💀");
     Console.WriteLine($"Game Over! {player.Name} was defeated by {enemy.Name}...");
-}
+}}
 
 
 
