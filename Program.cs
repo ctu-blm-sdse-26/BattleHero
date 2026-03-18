@@ -59,6 +59,7 @@ while (player.IsAlive && enemy.IsAlive)
     ===============================
     1. Attack
     2. Use Item From Inventory
+    3. Search for item
 
     choice:  
     """);
@@ -110,7 +111,23 @@ while (player.IsAlive && enemy.IsAlive)
         enemy.Attack(player);
     }
     counter++;
-}
+}else if (choice == 3) // Search for Item
+    {
+        Console.Write("Enter the name of the item to find: ");
+        string searchName = Console.ReadLine() ?? "";
+        var foundItem = bag.FindByName(searchName);
+
+        if (foundItem != null)
+        {
+            Console.WriteLine($"Found it! Details:");
+            foundItem.Describe();
+            // Optional: You could call player.UseItem() here if you find it!
+        }
+        else
+        {
+            Console.WriteLine($"'{searchName}' is not in your inventory.");
+        }
+    }
 
 Console.WriteLine($"""
     {player.Name} - HP: {player.Health}/{player.MaxHP}
