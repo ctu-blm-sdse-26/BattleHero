@@ -18,6 +18,7 @@ namespace HeroBattle.Models
         public int BaseAttack { get; set; } = 15;
         public int BaseDefense { get; set; } = 10;
         public int Gold { get; private set; } = 0;
+        public int XP { get; private set; } = 0;
         public bool IsAlive => Health > 0;
         protected Weapon? EquippedWeapon;
         public Inventory<Item> Bag { get; } = new Inventory<Item>();
@@ -101,12 +102,17 @@ int defense)
         }
         public void LevelUp()
         {
-            Level++;
-            MaxHP += 10;
-            Health = MaxHP;
-            BaseAttack += 3;
-            BaseDefense += 1;
-            Utils.Utils.PrintWithColor($"\n 🌟 {Name} reached Level {Level}! Statsincreased.\n", ConsoleColor.Yellow);
+            int level = (XP / 1000) + 1;
+
+            if (level > this.Level)
+            {
+                Utils.Utils.PrintWithColor($"\n 🌟 {Name} reached Level {Level}! Statsincreased.\n", ConsoleColor.Yellow);
+                this.Level = level;
+                MaxHP += 10 * Level;
+                Health = MaxHP;
+                BaseAttack += 3 * level;
+                BaseDefense += 1 * level;
+            }
         }
         public virtual void Describe()
         {
@@ -131,6 +137,11 @@ int defense)
         internal object GetStat(string v)
         {
             throw new NotImplementedException();
+        }
+
+        public void EarnXP(int XP)
+        {
+            this.XP += Math.Abs(XP);
         }
     }
 }
