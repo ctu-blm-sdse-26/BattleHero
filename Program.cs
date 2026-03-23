@@ -37,7 +37,7 @@ do
                 };
 
                 // Creating Enemy
-                Enemy enemy = new Enemy("Vector", 2, HeroClass.Rogue);
+                Enemy enemy = new Enemy("Vector", 500, 15, 25, 100);
                 Utils.Pause(1000);
                 Console.WriteLine($"A wild enemy named {enemy.Name} appears!");
 
@@ -105,6 +105,23 @@ do
                         }
                         counter++;
                     }
+                    else if (choice == 3) // Search for Item
+                    {
+                        Console.Write("Enter the name of the item to find: ");
+                        string searchName = Console.ReadLine() ?? "";
+                        var foundItem = bag.FindByName(searchName);
+
+                        if (foundItem != null)
+                        {
+                            Console.WriteLine($"Found it! Details:");
+                            foundItem.Describe();
+                            // Optional: You could call player.UseItem() here if you find it!
+                        }
+                        else
+                        {
+                            Console.WriteLine($"'{searchName}' is not in your inventory.");
+                        }
+                    }
 
                     Utils.PrintWithColor($"{_player.Name} - HP: {_player.Health}/{_player.MaxHP}", ConsoleColor.Green);
                     Console.WriteLine($"{enemy.Name} - HP: {enemy.Health}/{enemy.MaxHP}");
@@ -131,42 +148,6 @@ do
     }
 
 } while (true);
-
-
-    if (counter % 3 == 0)
-    {
-        Console.WriteLine($"{player.Name} uses a DOMAIN EXPANSION!!!! 🧙🏾‍♂️");
-        player.SuperAttack(enemy);
-    }
-    else if (choice == 1)
-    {
-        player.Attack(enemy);
-    }
-    if (enemy.IsAlive && player.IsAlive)
-    {
-        Console.WriteLine("👹Enemy is now Attacking...");
-        Utils.Pause(1000);
-        enemy.Attack(player);
-    }
-    counter++;
-}else if (choice == 3) // Search for Item
-    {
-        Console.Write("Enter the name of the item to find: ");
-        string searchName = Console.ReadLine() ?? "";
-        var foundItem = bag.FindByName(searchName);
-
-        if (foundItem != null)
-        {
-            Console.WriteLine($"Found it! Details:");
-            foundItem.Describe();
-            // Optional: You could call player.UseItem() here if you find it!
-        }
-        else
-        {
-            Console.WriteLine($"'{searchName}' is not in your inventory.");
-        }
-    }
-
 
 
 
