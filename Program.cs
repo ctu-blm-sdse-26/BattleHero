@@ -10,6 +10,11 @@ var bag = new Inventory<Item>();
 bag.Add(new HealthPotion());
 bag.Add(new Weapon("Short Sword", damage: 6));
 
+// var slime = new Enemy("Slime", hp: 30, atk: 5, reward: 10, xp: 15);
+// slime.Describe();
+// slime.TakeDamage(12);
+// slime.Describe();
+
 Console.Write("""
 
 Choose your hero class: 
@@ -40,8 +45,7 @@ HeroClass heroClass = choice switch
 };
 
 Hero player = new Hero(heroName, 1, heroClass);
-Enemy enemy = new Enemy("Vector", 2, HeroClass.Rogue);
-
+Enemy enemy = new Enemy("Vector", hp: 40, atk: 8, reward: 20, xp: 30);
 Utils.Pause(1000);
 
 Console.WriteLine($"A wild enemy named {enemy.Name} appears!");
@@ -74,20 +78,21 @@ while (player.IsAlive && enemy.IsAlive)
     
     """);
 
-    var items = bag.GetAll().ToList();
-    for (int i = 0; i < items.Count; i++)
-        Console.WriteLine($"{i + 1}. {items[i].Name}");
+        var items = bag.GetAll().ToList();
+        for (int i = 0; i < items.Count; i++)
+            Console.WriteLine($"{i + 1}. {items[i].Name}");
 
-    Console.Write("Choice: ");
+        Console.Write("Choice: ");
 
-    choice = int.Parse(Console.ReadLine() ?? "1");
-    if(choice >= 1 && choice <= items.Count) 
-    {
-        player.UseItem(choice - 1);
-    } 
-    else
-    {
-        Console.WriteLine("Invalid Choice.");  
+        choice = int.Parse(Console.ReadLine() ?? "1");
+        if (choice >= 1 && choice <= items.Count)
+        {
+            player.UseItem(choice - 1);
+        }
+        else
+        {
+            Console.WriteLine("Invalid Choice.");
+        }
     }
 
     Console.WriteLine("⚔️Player is now Attacking...");
@@ -128,7 +133,7 @@ else
 {
     Utils.PrintHeader("💀 Game Over! 💀");
     Console.WriteLine($"Game Over! {player.Name} was defeated by {enemy.Name}...");
-}}
+}
 
 
 
