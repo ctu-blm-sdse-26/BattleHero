@@ -1,6 +1,6 @@
-﻿using BattleHero.Models;
+﻿using NAudio.Wave;
+using BattleHero.Models;
 using HeroBattle.Enums;
-using HeroBattle.Interfaces;
 using HeroBattle.Models;
 using HeroBattle.Utils;
 
@@ -54,7 +54,7 @@ do
     Choose Your Action
     ===============================
     1. Attack
-    2. Use Item From Inventory
+    2. Use Item
 
     choice:  
     """);
@@ -65,9 +65,6 @@ do
                     {
                         Console.Write($"""
     ===============================
-    Choose an Item to Use
-    =============================== 
-    
     """);
 
                         var items = bag.GetAll().ToList();

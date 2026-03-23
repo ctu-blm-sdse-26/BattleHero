@@ -31,6 +31,7 @@ namespace HeroBattle.Models
         { "Heals", 0 },
         };
         private HeroClass heroClass;
+        internal object Kills;
 
         protected Character(string name, HeroClass heroClass, int maxHp, int baseAtk,
 int defense)
@@ -116,5 +117,20 @@ int defense)
             Console.WriteLine($" └─ Kills: {_stats["Kills"]} Dmg: {_stats["Damage"]} Healed: {_stats["Heals"]}");
         }
 
+        public int GetScore()
+        {
+            int kills = _stats["Kills"];
+            int damage = _stats["Damage"];
+            int heals = _stats["Heals"];
+
+            // Example scoring system
+            int score = (kills * 100) + (damage / 10) + (heals / 5) + (Gold / 5) + (Level * 50);
+            return score;
+        }
+
+        internal object GetStat(string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
