@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Threading.Tasks;
-using BattleHero.Models;
+using HeroBattle.Models;
 using HeroBattle.Enums;
 using HeroBattle.Interfaces;
 namespace HeroBattle.Models
@@ -15,11 +15,10 @@ namespace HeroBattle.Models
         public int Level { get; private set; } = 1;
         public HeroClass Class { get; set; }
         public int MaxHP { get; protected set; }
-        public int CurrentHP { get; private set; }
         public int BaseAttack { get; set; } = 15;
         public int BaseDefense { get; set; } = 10;
         public int Gold { get; private set; } = 0;
-        public bool IsAlive => CurrentHP > 0;
+        public bool IsAlive => Health > 0;
         protected Weapon? EquippedWeapon;
         public Inventory<Item> Bag { get; } = new Inventory<Item>();
 
@@ -39,11 +38,11 @@ int defense)
             Name = name;
             Class = heroClass;
             MaxHP = maxHp;
-            CurrentHP = maxHp;
             BaseAttack = baseAtk;
             BaseDefense = defense;
             Level = 1;
             Gold = 50;
+            Health = MaxHP;
         }
 
         protected Character(string name, int level, HeroClass heroClass)
@@ -51,6 +50,12 @@ int defense)
             Name = name;
             Level = level;
             this.heroClass = heroClass;
+            MaxHP = 100;
+            Health = MaxHP;
+            BaseAttack = 10;
+            BaseDefense = 5;
+            Gold = 0;
+
         }
 
         public void TakeDamage(int amount)
@@ -97,7 +102,7 @@ int defense)
         {
             Level++;
             MaxHP += 10;
-            CurrentHP = MaxHP;
+            Health = MaxHP;
             BaseAttack += 3;
             BaseDefense += 1;
             Utils.Utils.PrintWithColor($"\n 🌟 {Name} reached Level {Level}! Statsincreased.\n", ConsoleColor.Yellow);
@@ -105,7 +110,7 @@ int defense)
         public virtual void Describe()
         {
             Console.WriteLine($"\n ┌─ {Name} ({Class}) – Lv {Level}");
-            Console.WriteLine($" │ HP: {CurrentHP}/{MaxHP}");
+            Console.WriteLine($" │ HP: {Health}/{MaxHP}");
             Console.WriteLine($" │ ATK: {BaseAttack + (EquippedWeapon?.Damage ?? 0)} DEF: {BaseDefense} Gold: {Gold}g");
             Console.WriteLine($" │ Weapon: {EquippedWeapon?.Name ?? "Bare hands"}");
             Console.WriteLine($" └─ Kills: {_stats["Kills"]} Dmg: {_stats["Damage"]} Healed: {_stats["Heals"]}");

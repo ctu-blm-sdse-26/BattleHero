@@ -11,7 +11,9 @@ namespace HeroBattle.Models
     {
         public Enemy(string name, int level, HeroClass heroClass) : base(name, level, heroClass)
         {
-           
+           MaxHP = 120;
+           BaseAttack = 12;
+           BaseDefense = 5;
         }
 
         public int Attack(IDamageable target)

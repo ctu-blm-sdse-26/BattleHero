@@ -4,56 +4,52 @@ using HeroBattle.Interfaces;
 using HeroBattle.Models;
 using HeroBattle.Utils;
 
-Utils.PrintHeader("⚔️ Hero Battle Simulator ⚔️");
-
+// DEFAULT INVENTORY
 var bag = new Inventory<Item>();
 bag.Add(new HealthPotion());
-bag.Add(new Weapon("Short Sword", damage: 6));
+bag.Add(new Weapon("Power Pole", 15));
+bag.Add(new Armour(20, "Shield"));
 
-Console.Write("""
+Utils.PrintHeader("⚔️ Hero Battle Simulator ⚔️");
+int choice = -1;
 
-Choose your hero class: 
-1. Warrior - High health and defense, moderate attack.
-2. Mage - High attack, low health and defense.
-3. Rogue - Balanced attack and defense, moderate health.
-
-choice: 
-""");
-
-int choice = int.Parse(Console.ReadLine() ?? "1");
-
-Console.Write("""
-
-Choose your hero Name: 
-""");
-
-string heroName = Console.ReadLine() ?? "Hero";
-
-Console.WriteLine("Creating Character..." + heroName);
-
-HeroClass heroClass = choice switch
+do
 {
-    1 => HeroClass.Warrior,
-    2 => HeroClass.Mage,
-    3 => HeroClass.Rogue,
-    _ => HeroClass.Warrior
-};
+    Utils.MainMenu();
+    choice = int.Parse(Console.ReadLine() ?? "1");
 
-Hero player = new Hero(heroName, 1, heroClass);
-Enemy enemy = new Enemy("Vector", 2, HeroClass.Rogue);
+    switch (choice)
+    {
+        case 1:
+            {
+                // NEW GAME SETUP --------------------------
+                HeroClass _heroClass = Utils.ChooseHeroClassMenu();
+                string _heroName = Utils.CreateHeroNameMenu();
 
-Utils.Pause(1000);
+                // Create character --------------------
+                Console.WriteLine("Creating Character..." + _heroName);
+                Character _player = _heroClass switch
+                {
+                    HeroClass.Warrior => new Warrior(_heroName),
+                    HeroClass.Mage => new Mage(_heroName),
+                    HeroClass.Rogue => new Mage(_heroName),
+                    _ => new Warrior(_heroName)
+                };
 
-Console.WriteLine($"A wild enemy named {enemy.Name} appears!");
-int counter = 1;
-while (player.IsAlive && enemy.IsAlive)
-{
-    Console.WriteLine($"""
-    {player.Name} - HP: {player.Health}/{player.MaxHP}
-    {enemy.Name} - HP: {enemy.Health}/{enemy.MaxHP}
-    """);
+                // Creating Enemy
+                Enemy enemy = new Enemy("Vector", 2, HeroClass.Rogue);
+                Utils.Pause(1000);
+                Console.WriteLine($"A wild enemy named {enemy.Name} appears!");
 
-    Console.Write("""
+                Utils.PrintWithColor($"{_player.Name} - HP: {_player.Health}/{_player.MaxHP}", ConsoleColor.Green);
+                Console.WriteLine($"{enemy.Name} - HP: {enemy.Health}/{enemy.MaxHP}");
+
+                // Start Battle
+                int counter = 1;
+                while (_player.IsAlive && enemy.IsAlive)
+                {
+
+                    Console.Write("""
     ===============================
     Choose Your Action
     ===============================
@@ -63,72 +59,84 @@ while (player.IsAlive && enemy.IsAlive)
     choice:  
     """);
 
-    choice = int.Parse(Console.ReadLine() ?? "1");
+                    choice = int.Parse(Console.ReadLine() ?? "1");
 
-    if (choice == 2)
-    {
-        Console.Write($"""
+                    if (choice == 2)
+                    {
+                        Console.Write($"""
     ===============================
     Choose an Item to Use
     =============================== 
     
     """);
 
-    var items = bag.GetAll().ToList();
-    for (int i = 0; i < items.Count; i++)
-        Console.WriteLine($"{i + 1}. {items[i].Name}");
+                        var items = bag.GetAll().ToList();
+                        for (int i = 0; i < items.Count; i++)
+                            Console.WriteLine($"{i + 1}. {items[i].Name}");
 
-    Console.Write("Choice: ");
+                        Console.Write("Choice: ");
 
-    choice = int.Parse(Console.ReadLine() ?? "1");
-    if(choice >= 1 && choice <= items.Count) 
-    {
-        player.UseItem(choice - 1);
-    } 
-    else
-    {
-        Console.WriteLine("Invalid Choice.");  
+                        choice = int.Parse(Console.ReadLine() ?? "1");
+                        if (choice >= 1 && choice <= items.Count)
+                        {
+                            _player.UseItem(choice - 1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid Choice.");
+                        }
+
+                        Console.WriteLine("⚔️Player is now Attacking...");
+                        Utils.Pause(1000);
+
+
+                        if (counter % 3 == 0)
+                        {
+                            Console.WriteLine($"{_player.Name} uses a DOMAIN EXPANSION!!!! 🧙🏾‍♂️");
+                            _player.UseSpecial(enemy);
+                        }
+                        else if (choice == 1)
+                        {
+                            _player.Attack(enemy);
+                        }
+                        if (enemy.IsAlive && _player.IsAlive)
+                        {
+                            Console.WriteLine("👹Enemy is now Attacking...");
+                            Utils.Pause(1000);
+                            enemy.Attack(_player);
+                        }
+                        counter++;
+                    }
+
+                    Utils.PrintWithColor($"{_player.Name} - HP: {_player.Health}/{_player.MaxHP}", ConsoleColor.Green);
+                    Console.WriteLine($"{enemy.Name} - HP: {enemy.Health}/{enemy.MaxHP}");
+
+                    if (_player.IsAlive)
+                    {
+                        Utils.PrintHeader("🎉 Victory! 🎉");
+                        Console.WriteLine($"{_player.Name} has defeated {enemy.Name}!");
+                        _player.EarnGold(20);
+                        _player.LevelUp();
+                    }
+                    else
+                    {
+                        Utils.PrintHeader("💀 Game Over! 💀");
+                        Console.WriteLine($"Game Over! {_player.Name} was defeated by {enemy.Name}...");
+                    }
+                }
+
+            }
+            break;
+        case 0:
+            { return; }
+        _: { Console.WriteLine("Invalid Choice."); Utils.Pause(); }
     }
 
-    Console.WriteLine("⚔️Player is now Attacking...");
-    Utils.Pause(1000);
+} while (true);
 
 
-    if (counter % 3 == 0)
-    {
-        Console.WriteLine($"{player.Name} uses a DOMAIN EXPANSION!!!! 🧙🏾‍♂️");
-        player.SuperAttack(enemy);
-    }
-    else if (choice == 1)
-    {
-        player.Attack(enemy);
-    }
-    if (enemy.IsAlive && player.IsAlive)
-    {
-        Console.WriteLine("👹Enemy is now Attacking...");
-        Utils.Pause(1000);
-        enemy.Attack(player);
-    }
-    counter++;
-}
 
-Console.WriteLine($"""
-    {player.Name} - HP: {player.Health}/{player.MaxHP}
-    {enemy.Name} - HP: {enemy.Health}/{enemy.MaxHP}
-    """);
 
-if (player.IsAlive)
-{
-    Utils.PrintHeader("🎉 Victory! 🎉");
-    Console.WriteLine($"{player.Name} has defeated {enemy.Name}!");
-    player.EarnGold(20);
-    player.LevelUp();
-}
-else
-{
-    Utils.PrintHeader("💀 Game Over! 💀");
-    Console.WriteLine($"Game Over! {player.Name} was defeated by {enemy.Name}...");
-}}
 
 
 

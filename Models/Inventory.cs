@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HeroBattle.Interfaces;
-namespace BattleHero.Models
+namespace HeroBattle.Models
 {
   public class Inventory<T> where T : IDescribable
     {
