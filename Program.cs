@@ -43,12 +43,12 @@ var bag = new Inventory<Item>();
 bag.Add(new HealthPotion());
 bag.Add(new Weapon("Short Sword", damage: 6));
 
-int choice;
+// var slime = new Enemy("Slime", hp: 30, atk: 5, reward: 10, xp: 15);
+// slime.Describe();
+// slime.TakeDamage(12);
+// slime.Describe();
 
-// 🎮 HERO CLASS INPUT (SAFE)
-while (true)
-{
-    Console.Write(""" 
+Console.Write("""
 
 Choose your hero class: 
 1. Warrior
@@ -102,8 +102,7 @@ HeroClass heroClass = choice switch
 };
 
 Hero player = new Hero(heroName, 1, heroClass);
-Enemy enemy = new Enemy("Vector", 2, HeroClass.Rogue);
-
+Enemy enemy = new Enemy("Vector", hp: 40, atk: 8, reward: 20, xp: 30);
 Utils.Pause(1000);
 
 Console.WriteLine($"A wild enemy named {enemy.Name} appears!");
