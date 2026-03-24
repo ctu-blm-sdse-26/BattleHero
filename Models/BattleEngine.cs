@@ -10,6 +10,7 @@ namespace BattleHero.Models
     public class BattleEngine
     {
         private static Random Rng = new Random();
+
         public static int RunBattle(Character hero, Enemy enemy)
 
         {
@@ -51,10 +52,20 @@ namespace BattleHero.Models
                             hero.UseItem(idx);
                         break;
                     case "4":
-                        Console.WriteLine($" 🏃 {hero.Name} flees!");
-                        return -1; // special return code meaning "fled"
+                        int roll = Rng.Next(100);
+
+                        if (roll < 60) 
+                        {
+                            Console.WriteLine($"{hero.Name} successfully flees from the battle!");
+                            return -1; //
+                        }
+                        else 
+                        {
+                            Console.WriteLine($"The {enemy.Name} blocks your escape!");
+                            break; 
+                        }
                     default:
-                        Console.WriteLine(" ❓ Unknown command.");
+                        Console.WriteLine("Unknown command.");
                         continue;
                 }
                 Utils.Pause();
