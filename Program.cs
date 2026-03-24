@@ -35,12 +35,14 @@ do
             var shop = new Shop();
             var rng = new Random();
             int totalXP = 0;
+            int score = 0;
  
             List<Enemy> enemyPool = new List<Enemy>
             {
                 new Enemy("Slime", 30, 5, 10, 15),
                 new Enemy("Goblin", 45, 8, 18, 25),
-                new Enemy("Orc Warrior", 70, 12, 30, 40)
+                new Enemy("Orc Warrior", 70, 12, 30, 40),
+                new Enemy("Dragon Boss", 150, 20, 100, 100)
             };
  
             bool playing = true;
@@ -69,11 +71,17 @@ do
  
                     if (_player.IsAlive)
                     {
+                        Console.WriteLine("Victory!");
                         _player.EarnGold(enemy.Reward);
                         totalXP += enemy.XP;
+                        score += enemy.XP;
  
                         if (totalXP / 60 >= _player.Level)
                             _player.LevelUp();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Game Over!");
                     }
                 }
                 else if (choice == 2)
@@ -95,6 +103,13 @@ do
                     playing = false;
                 }
             }
+ 
+            Console.WriteLine("\n🎮 GAME OVER");
+            Console.WriteLine($"Hero: {_player.Name}");
+            Console.WriteLine($"Level: {_player.Level}");
+            Console.WriteLine($"XP: {totalXP}");
+            Console.WriteLine($"Score: {score}");
+            Console.ReadKey();
         }
         break;
  
