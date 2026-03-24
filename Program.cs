@@ -35,7 +35,20 @@ do
             _player.Bag.Add(new Weapon("Power Pole", 15));
             _player.Bag.Add(new Armour(20, "Shield"));
  
-            Console.WriteLine($"Hero {_player.Name} created!");
+            // GAME SYSTEMS
+            
+            var shop = new Shop();
+            var rng = new Random();
+            int totalXP = 0;
+ 
+            List<Enemy> enemyPool = new List<Enemy>
+            {
+                new Enemy("Slime", 30, 5, 10, 15),
+                new Enemy("Goblin", 45, 8, 18, 25),
+                new Enemy("Orc Warrior", 70, 12, 30, 40)
+            };
+ 
+            Console.WriteLine("Game systems ready!");
         }
         break;
  
