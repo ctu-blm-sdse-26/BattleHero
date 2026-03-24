@@ -18,10 +18,7 @@ do
         case 1:
         {
             HeroClass _heroClass = Utils.ChooseHeroClassMenu();
-            Console.WriteLine();
- 
             string _heroName = Utils.CreateHeroNameMenu();
-            Console.WriteLine();
  
             Character _player = _heroClass switch
             {
@@ -35,8 +32,6 @@ do
             _player.Bag.Add(new Weapon("Power Pole", 15));
             _player.Bag.Add(new Armour(20, "Shield"));
  
-            // GAME SYSTEMS
-            
             var shop = new Shop();
             var rng = new Random();
             int totalXP = 0;
@@ -48,7 +43,58 @@ do
                 new Enemy("Orc Warrior", 70, 12, 30, 40)
             };
  
-            Console.WriteLine("Game systems ready!");
+            bool playing = true;
+ 
+            while (playing && _player.IsAlive)
+            {
+                Console.WriteLine("""
+1. Fight
+2. Inventory
+3. Shop
+4. Quit
+""");
+ 
+                choice = int.Parse(Console.ReadLine() ?? "1");
+ 
+                if (choice == 1)
+                {
+                    Enemy enemy = enemyPool[rng.Next(enemyPool.Count)];
+ 
+                    while (_player.IsAlive && enemy.IsAlive)
+                    {
+                        _player.Attack(enemy);
+                        if (enemy.IsAlive)
+                            enemy.Attack(_player);
+                    }
+ 
+                    if (_player.IsAlive)
+                    {
+                        _player.EarnGold(enemy.Reward);
+                        totalXP += enemy.XP;
+ 
+                        if (totalXP / 60 >= _player.Level)
+                            _player.LevelUp();
+                    }
+                }
+                else if (choice == 2)
+                {
+                    var items = _player.Bag.GetAll().ToList();
+                    for (int i = 0; i < items.Count; i++)
+                        Console.WriteLine($"[{i + 1}] {items[i].Name}");
+ 
+                    int pick = int.Parse(Console.ReadLine() ?? "1");
+                    if (pick >= 1 && pick <= items.Count)
+                        _player.UseItem(pick - 1);
+                }
+                else if (choice == 3)
+                {
+                    shop.Browse(_player);
+                }
+                else if (choice == 4)
+                {
+                    playing = false;
+                }
+            }
         }
         break;
  
