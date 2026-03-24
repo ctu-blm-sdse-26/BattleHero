@@ -31,7 +31,7 @@ namespace BattleHero.Models
 
         public T? FindByName(string name)
         {
-            return _items.FirstOrDefault(item => item.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return _items.FirstOrDefault(item => item.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

@@ -97,7 +97,7 @@ do
                     {
                         Console.Write("Enter the name of the item to find: ");
                         string searchName = Console.ReadLine() ?? "";
-                        var foundItem = bag.FindByName(searchName);
+                        var foundItem = _player.Bag.FindByName(searchName);
 
                         if (foundItem != null)
                         {
