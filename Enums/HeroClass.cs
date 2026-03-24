@@ -6,5 +6,6 @@ namespace HeroBattle.Enums
         Warrior,
         Mage,
         Rogue,
+        Paladin,
     }
 }
