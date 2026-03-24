@@ -7,6 +7,7 @@ namespace HeroBattle.Interfaces
 {
     public interface IDescribable
     {
+        string Name {get;}
         public void Describe();
     }
 }

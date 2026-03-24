@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HeroBattle.Models;
 using HeroBattle.Enums;
 using HeroBattle.Interfaces;
+using BattleHero.Models;
 namespace HeroBattle.Models
 {
     public abstract class Character : IDamageable, IAttacker

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HeroBattle.Interfaces;
-namespace HeroBattle.Models
+using HeroBattle.Models;
+namespace BattleHero.Models
 {
   public class Inventory<T> where T : IDescribable
     {
@@ -26,6 +27,11 @@ namespace HeroBattle.Models
             }
             foreach(var item in _items)
                 item.Describe();
+        }
+
+        public T? FindByName(string name)
+        {
+            return _items.FirstOrDefault(item => item.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
