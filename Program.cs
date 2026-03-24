@@ -62,6 +62,7 @@ do
     1. Attack
     2. Use Item From Inventory
     3. Search for item
+    4. Visit Shop
 
     choice:  
     """);
@@ -97,7 +98,7 @@ do
                     {
                         Console.Write("Enter the name of the item to find: ");
                         string searchName = Console.ReadLine() ?? "";
-                        var foundItem = bag.FindByName(searchName);
+                        var foundItem = _player.Bag.FindByName(searchName);
 
                         if (foundItem != null)
                         {
@@ -132,7 +133,13 @@ do
                         }
                     }
 
-                    if(choice != 1 && choice != 2)
+                    if(choice == 4)
+                    {
+                        var shop = new Shop();
+                        shop.Browse(_player);
+                    }
+
+                    if(choice != 1 && choice != 2 && choice != 3 && choice != 4)
                     {
                         Console.WriteLine("Invalid Choice.\n");
                     }
