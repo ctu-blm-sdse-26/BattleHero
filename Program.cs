@@ -9,7 +9,7 @@ using HeroBattle.data;
 Utils.PrintHeader("⚔️ Hero Battle Simulator ⚔️");
 
 int choice = -1; // stores menu choice
-
+Character _player;
 do
 {
     Utils.MainMenu(); // show main menu
@@ -53,7 +53,7 @@ do
                 string _heroName = Utils.CreateHeroNameMenu();
 
                 // create player depending on class selected
-                Character _player = _heroClass switch
+                _player = _heroClass switch
                 {
                     HeroClass.Warrior => new Warrior(_heroName),
                     HeroClass.Mage => new Mage(_heroName),
