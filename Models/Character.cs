@@ -7,10 +7,13 @@ using HeroBattle.Models;
 using HeroBattle.Enums;
 using HeroBattle.Interfaces;
 using BattleHero.Models;
+using HeroBattle.data;
 namespace HeroBattle.Models
 {
     public abstract class Character : IDamageable, IAttacker
     {
+        
+        public int Id { get; set; }
         public string Name { get; set; }
         public int Health { get; set; }
         public int Level { get; private set; } = 1;
@@ -144,5 +147,8 @@ int defense)
         {
             this.XP += Math.Abs(XP);
         }
+
+        
+
     }
 }

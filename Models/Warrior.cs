@@ -1,4 +1,5 @@
 using System;
+using HeroBattle.data;
 using HeroBattle.Enums;
 using HeroBattle.Interfaces;
 using HeroBattle.Utils;
@@ -16,7 +17,7 @@ public class Warrior : Character
         : base(name, HeroClass.Warrior, maxHp: 120, baseAtk: 12, defense: 5)
 
     {
-
+        
     }
 
     public void DealDamage(IDamageable target)
@@ -54,4 +55,10 @@ public class Warrior : Character
             base.Attack(target);
         }
     }
+    public void SaveCharacter()
+        {
+            var db = new GameContext();
+            db.Warriors.Add(this);
+            db.SaveChanges();
+        }
 }
