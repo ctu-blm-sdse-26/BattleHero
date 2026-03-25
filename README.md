@@ -9,5 +9,11 @@ Battle Simulator Game Built in C#. The Project is intended to be worked through 
 - Franco
 - Prince
 - Zandre
+- Olaotse
+- Tirick
+- Louis
+- Kevin
+- Hainz
+- Christopher
 
 These Are our Contributors
