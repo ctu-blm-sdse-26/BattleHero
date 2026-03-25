@@ -41,8 +41,7 @@ namespace HeroBattle.Utils
         {
             PrintHeader("Main Menu");
             Console.WriteLine("[1] New Game");
-            // TODO: Persistent Game Data
-            // Console.WriteLine("[2] Load Game");
+            Console.WriteLine("[2] Load Game");
             Console.WriteLine("[0] Exit");
             Console.Write("Choice: ");
         }

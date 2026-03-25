@@ -3,10 +3,12 @@ using BattleHero.Models;
 using HeroBattle.Enums;
 using HeroBattle.Models;
 using HeroBattle.Utils;
+using HeroBattle.data;
 
 
 Utils.PrintHeader("⚔️ Hero Battle Simulator ⚔️");
 int choice = -1;
+Character? _player;
 
 do
 {
@@ -15,6 +17,35 @@ do
 
     switch (choice)
     {
+        case 2:
+            {
+                var db = new GameContext();
+                List<Warrior> warriors = db.Warriors.ToList();
+                Utils.PrintHeader("Load From Database:");
+                for (int i = 0; i < warriors.Count; i++)
+                {
+                    Console.WriteLine($"[{i + 1}] {warriors[i].Name}");
+                }
+                Console.WriteLine("[0] Cancel");
+                Console.Write("Choice: ");
+                choice = int.Parse(Console.ReadLine() ?? "0");
+
+                if(choice == 0)
+                {
+                    break;
+                } 
+                else
+                {
+                    _player = warriors[choice - 1];
+                    if (_player.IsAlive)
+                    {
+                        Utils.PrintWithColor("Player Loaded from database", ConsoleColor.Green);
+                        _player.Describe();
+                        Utils.Pause(5000);
+                    } 
+                }
+            }
+            break;
         case 1:
             {
                 // NEW GAME SETUP --------------------------
@@ -26,18 +57,23 @@ do
 
                 // Create character --------------------
                 Console.WriteLine("Creating Character..." + _heroName);
-                Character _player = _heroClass switch
+                _player = _heroClass switch
                 {
                     HeroClass.Warrior => new Warrior(_heroName),
                     HeroClass.Mage => new Mage(_heroName),
                     HeroClass.Rogue => new Mage(_heroName),
                     _ => new Warrior(_heroName)
                 };
+
+                // Save Player
+                // if(_player.)
+
                 _player.Bag.Add(new HealthPotion());
                 _player.Bag.Add(new Weapon("Power Pole", 15));
                 _player.Bag.Add(new Armour(20, "Shield"));
 
                 Console.WriteLine();
+                
 
                 // Creating Enemy
                 Enemy enemy = new Enemy("Bad Guy", 200, 2, 300, 50);

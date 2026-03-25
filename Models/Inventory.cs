@@ -8,6 +8,7 @@ namespace BattleHero.Models
 {
   public class Inventory<T> where T : IDescribable
     {
+        public int Id { get; set; }
         private readonly List<T> _items = new List<T>();
         public int Count => _items.Count;
         public void Add(T item)
