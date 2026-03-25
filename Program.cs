@@ -4,182 +4,137 @@ using HeroBattle.Enums;
 using HeroBattle.Models;
 using HeroBattle.Utils;
 
-
+// Print game title at the top
 Utils.PrintHeader("⚔️ Hero Battle Simulator ⚔️");
-int choice = -1;
+
+int choice = -1; // stores menu choice
 
 do
 {
-    Utils.MainMenu();
-    choice = int.Parse(Console.ReadLine() ?? "1");
+    Utils.MainMenu(); // show main menu
+    choice = int.Parse(Console.ReadLine() ?? "1"); // read user input (default 1 if null)
 
     switch (choice)
     {
         case 1:
             {
-                // NEW GAME SETUP --------------------------
+                // choose hero class and name
                 HeroClass _heroClass = Utils.ChooseHeroClassMenu();
-                Console.WriteLine();
-
                 string _heroName = Utils.CreateHeroNameMenu();
-                Console.WriteLine();
 
-                // Create character --------------------
-                Console.WriteLine("Creating Character..." + _heroName);
+                // create player depending on class selected
                 Character _player = _heroClass switch
                 {
                     HeroClass.Warrior => new Warrior(_heroName),
                     HeroClass.Mage => new Mage(_heroName),
-                    HeroClass.Rogue => new Mage(_heroName),
-                    _ => new Warrior(_heroName)
+                    HeroClass.Rogue => new Rogue(_heroName),
+                    _ => new Warrior(_heroName) // fallback just in case
                 };
+
+                // give player some starting items
                 _player.Bag.Add(new HealthPotion());
                 _player.Bag.Add(new Weapon("Power Pole", 15));
                 _player.Bag.Add(new Armour(20, "Shield"));
 
-                Console.WriteLine();
+                var shop = new Shop(); // shop instance
+                var rng = new Random(); // random generator for enemies
+                int totalXP = 0; // total xp earned
+                int score = 0; // score tracker (same as xp for now)
 
-                // Creating Enemy
-                Enemy enemy = new Enemy("Bad Guy", 200, 2, 300, 50);
-                Utils.Pause(1000);
-                Console.WriteLine();
-                Console.WriteLine($"A wild enemy named {enemy.Name} appears!\n");
+                // list of possible enemies
+                List<Enemy> enemyPool = new List<Enemy>
+            {
+                new Enemy("Slime", 30, 5, 10, 15),
+                new Enemy("Goblin", 45, 8, 18, 25),
+                new Enemy("Orc Warrior", 70, 12, 30, 40),
+                new Enemy("Dragon Boss", 150, 20, 100, 100)
+            };
 
-                Utils.PrintHeader("Current Health Stats:");
-                Utils.PrintWithColor($"{_player.Name} - HP: {_player.Health}/{_player.MaxHP}", ConsoleColor.Green);
-                Console.WriteLine($"{enemy.Name} - HP: {enemy.Health}/{enemy.MaxHP}");
-                Console.WriteLine();
+                bool playing = true; // controls game loop
 
-                // Start Battle
-                int counter = 1;
-                while (_player.IsAlive && enemy.IsAlive)
+                // main gameplay loop
+                while (playing && _player.IsAlive)
                 {
-                    Utils.PrintHeader("Choose Your Action");
-                    Console.Write("""
-    ===============================
-    Choose Your Action
-    ===============================
-    1. Attack
-    2. Use Item From Inventory
-    3. Search for item
-    4. Visit Shop
-
-    choice:  
-    """);
+                    Console.WriteLine("""
+                    1. Fight
+                    2. Inventory
+                    3. Shop
+                    4. Quit
+                    """);
 
                     choice = int.Parse(Console.ReadLine() ?? "1");
 
                     if (choice == 1)
                     {
-                        Console.WriteLine("⚔️Player is now Attacking...");
-                        Utils.Pause(1000);
+                        // pick random enemy
+                        Enemy enemy = enemyPool[rng.Next(enemyPool.Count)];
 
-
-                        if (counter % 3 == 0)
+                        // fight loop until someone dies
+                        while (_player.IsAlive && enemy.IsAlive)
                         {
-                            Console.WriteLine($"{_player.Name} uses a DOMAIN EXPANSION!!!! 🧙🏾‍♂️");
-                            _player.UseSpecial(enemy);
+                            _player.Attack(enemy); // player attacks first
+                            if (enemy.IsAlive)
+                                enemy.Attack(_player); // enemy attacks back
+                        }
+
+                        if (_player.IsAlive)
+                        {
+                            Console.WriteLine("Victory!");
+
+                            // rewards
+                            _player.EarnGold(enemy.Reward);
+                            totalXP += enemy.XP;
+                            score += enemy.XP;
+
+                            // level up check (kinda simple formula)
+                            if (totalXP / 60 >= _player.Level)
+                                _player.LevelUp();
                         }
                         else
                         {
-                            _player.Attack(enemy);
-                        }
-
-                        if (enemy.IsAlive && _player.IsAlive)
-                        {
-                            Console.WriteLine("👹Enemy is now Attacking...");
-                            Utils.Pause(1000);
-                            enemy.Attack(_player);
-                        }
-
-                        counter++;
-                    }
-                    else if (choice == 3) // Search for Item
-                    {
-                        Console.Write("Enter the name of the item to find: ");
-                        string searchName = Console.ReadLine() ?? "";
-                        var foundItem = _player.Bag.FindByName(searchName);
-
-                        if (foundItem != null)
-                        {
-                            Console.WriteLine($"Found it! Details:");
-                            foundItem.Describe();
-                            // Optional: You could call player.UseItem() here if you find it!
-                        }
-                        else
-                        {
-                            Console.WriteLine($"'{searchName}' is not in your inventory.");
+                            Console.WriteLine("Game Over!");
                         }
                     }
-
-                    if (choice == 2)
+                    else if (choice == 2)
                     {
-                        Utils.PrintHeader("Pick Item: ");
-
+                        // show inventory items
                         var items = _player.Bag.GetAll().ToList();
                         for (int i = 0; i < items.Count; i++)
                             Console.WriteLine($"[{i + 1}] {items[i].Name}");
 
-                        Console.Write("Choice: ");
-
-                        choice = int.Parse(Console.ReadLine() ?? "1");
-                        if (choice >= 1 && choice <= items.Count)
-                        {
-                            _player.UseItem(choice - 1);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid Choice.");
-                        }
+                        // choose item to use
+                        int pick = int.Parse(Console.ReadLine() ?? "1");
+                        if (pick >= 1 && pick <= items.Count)
+                            _player.UseItem(pick - 1); // index starts at 0
                     }
-
-                    if(choice == 4)
+                    else if (choice == 3)
                     {
-                        var shop = new Shop();
+                        // open shop menu
                         shop.Browse(_player);
                     }
-
-                    if(choice != 1 && choice != 2 && choice != 3 && choice != 4)
+                    else if (choice == 4)
                     {
-                        Console.WriteLine("Invalid Choice.\n");
-                    }
-
-                    Utils.PrintHeader("Current Health Stats:");
-                    Utils.PrintWithColor($"{_player.Name} - HP: {_player.Health}/{_player.MaxHP}", ConsoleColor.Green);
-                    Console.WriteLine($"{enemy.Name} - HP: {enemy.Health}/{enemy.MaxHP} \n");
-
-                    if (!enemy.IsAlive)
-                    {
-                        Utils.PrintHeader("🎉 Victory! 🎉");
-                        Console.WriteLine($"{_player.Name} has defeated {enemy.Name}!");
-                        _player.EarnGold(enemy.Reward);
-                        _player.EarnXP(enemy.XP);
-                        _player.LevelUp();
-
-                    }
-                    
-                    if(!_player.IsAlive)
-                    {
-                        Utils.PrintHeader("💀 Game Over! 💀");
-                        Console.WriteLine($"Game Over! {_player.Name} was defeated by {enemy.Name}...");
+                        // exit game loop
+                        playing = false;
                     }
                 }
+
+                // end game
+                Console.WriteLine("\n🎮 GAME OVER");
+                Console.WriteLine($"Hero: {_player.Name}");
+                Console.WriteLine($"Level: {_player.Level}");
+                Console.WriteLine($"XP: {totalXP}");
+                Console.WriteLine($"Score: {score}");
+                Console.ReadKey(); // pause before returning to main menu
             }
             break;
+
         case 0:
-            { return; }
-        _: { Console.WriteLine("Invalid Choice."); Utils.Pause(); }
+            return; // exit program completely
+
+        default:
+            Console.WriteLine("Invalid Choice.");
+            break;
     }
 
-} while (true);
-
-
-
-
-
-
-
-
-
-
-
+} while (true); // keeps main menu running
